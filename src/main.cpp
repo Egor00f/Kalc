@@ -13,20 +13,30 @@
 
 int main() {
 	
-	LoadConfiguration();
+	KolibriLib::init();
+
+	KolibriLib::UI::Size WindowSize = globals::window.GetSize();
+
+	globals::window.CreateForm(
+		KolibriLib::UI::Form(
+			{KolibriLib::UI::DefaultMargin, KolibriLib::UI::DefaultMargin},
+			{WindowSize.x - (KolibriLib::UI::DefaultMargin * 2), },
+			"0"
+		)
+	);
 
 	while(true)
 	{
-		unsigned Event = globals::window.Handler();
+		KolibriLib::OS::Event event = globals::window.Handler();
 
-		if(KolibriLib::EXIT || globals::window._Exit)
+		switch (event)
 		{
-			if(KolibriLib::EXITCODE != 0)
-			{
-				std::string message = "Error:";
-
-				KolibriLib::childWindow::ErrorWindow(message);
-			}
+		case KolibriLib::OS::Events::Exit:
+			
+			break;
+		
+		default:
+			break;
 		}
 	}
 

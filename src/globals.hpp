@@ -14,9 +14,6 @@ namespace globals
 
     //Основное окно
     KolibriLib::window::Window window(globals::TITLE, {800, 480});
-
-    //Папка в которой лежит конфиг
-    std::string ProgramConfPath = "/sys/etc/" + TITLE;
 }
 
 
