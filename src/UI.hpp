@@ -38,7 +38,7 @@ namespace CalcButtons
 
 		for(unsigned i = 0; i < button_cols * button_rows; i++)
 		{
-			globals::window.CreateButton({}, {ButtonsWidth, ButtonsHeight}, std::string());
+			globals::window.CreateButton({}, {ButtonsWidth, ButtonsHeight}, ;
 		}
 	}
 

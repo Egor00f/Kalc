@@ -7,9 +7,7 @@
 #include <string>
 
 #include "globals.hpp"
-#include "configuration.hpp"
-
-
+#include "UI.hpp"
 
 int main() {
 	
@@ -17,13 +15,16 @@ int main() {
 
 	KolibriLib::UI::Size WindowSize = globals::window.GetSize();
 
-	globals::window.CreateForm(
+	// Основная форм
+	unsigned output = globals::window.CreateForm(
 		KolibriLib::UI::Form(
 			{KolibriLib::UI::DefaultMargin, KolibriLib::UI::DefaultMargin},
-			{WindowSize.x - (KolibriLib::UI::DefaultMargin * 2), },
+			{WindowSize.x - (KolibriLib::UI::DefaultMargin * 2), WindowSize.y / 4},
 			"0"
 		)
 	);
+
+	
 
 	while(true)
 	{
@@ -35,8 +36,6 @@ int main() {
 			
 			break;
 		
-		default:
-			break;
 		}
 	}
 

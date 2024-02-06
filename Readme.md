@@ -1,17 +1,18 @@
 Kalc
 ===
 
-Kalc - это калькулятор
+Kalc - это калькулятор для KolibriOS
+
+Функции:
++ Обычный калькулятор
++ Построение графиков
 
 Сборка
 ---
-Для сбокри необходима библиотека KolibriLib
-
-
+Ну тут всё просто:
 ```
 cd ~
 git clone https://github.com/Egor00f/Kalc.git
-git clone https://github.com/Egor00f/KolibriOS-Cpp-Lib.hit
 cd Kalc
-cmake .
+make
 ```

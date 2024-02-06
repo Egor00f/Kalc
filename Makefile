@@ -1,10 +1,5 @@
 #NAME
-EXECUTABLE = Kalc
-
-TOOLCHAIN_PATH = C:/MinGW/msys/1.0/home/autobuild/tools/win32/
-
-COMPILER_PATH = ${TOOLCHAIN_PATH}bin/
-
+EXECUTABLE = kalc
 
 AR	= kos32-ar
 AS	= kos32-as
@@ -13,35 +8,55 @@ CXX	= kos32-g++
 LD	= kos32-ld 
 
 #DIRs
-SDK_DIR = ../contrib/sdk
-SRC_DIR = src/
+CONTRIB_DIR = F:/KolibriOs/contrib
+SDK_DIR = $(CONTRIB_DIR)/sdk
 
-INCLUDES = -I $(SDK_DIR)/sources/libstdc++-v3/include -I $(SDK_DIR)/sources/newlib/libc/include -I KolibriOS-Cpp-Lib/src/include
-LIBPATH = -L $(SDK_DIR)/lib -L ${TOOLCHAIN_PATH}mingw32/lib
+
+
+INCLUDES = -I $(SDK_DIR)/sources/newlib/libc/include -I $(SDK_DIR)/sources/libstdc++-v3/include 
+LIBPATH = -L $(SDK_DIR)/lib -L C:/MinGW/msys/1.0/home/autobuild/tools/win32/mingw32/lib
 
 #Flags
-CFLAGS = -c -fno-ident -fomit-frame-pointer -fno-ident -U__WIN32__ -U_Win32 -U_WIN32 -U__MINGW32__ -UWIN32 -std=gnu++11
-LDFLAGS = -static -S -Tapp-dynamic.lds --image-base 0 -O2
-
-
-SOURCES = $(SRC_DIR)main.cpp 
-OBJECTS =  $(patsubst $(SRC_DIR)%.cpp, $(SRC_DIR)%.o, $(SOURCES))
-
-default: kalc
+CFLAGS = -c -fno-ident -fomit-frame-pointer -fno-ident -U__WIN32__ -U_Win32 -U_WIN32 -U__MINGW32__ -UWIN32 -std=c++14
+LDFLAGS = -static -S -nostdlib -Tapp-dynamic.lds --image-base 0 -O2 -T $(SDK_DIR)/sources/newlib/app.lds
 
 
 
-kalc: $(OBJECTS) Makefile
+SOURCES = $(EXECUTABLE).cpp 
+OBJECTS =  $(patsubst %.cpp, %.o, $(SOURCES))
+
+
+
+################# KolibriLib ####################
+
+############### C Layer ############
+C_LAYER_DIR = ../../C_Layer
+C_LAYER_OBJ = $(C_LAYER_DIR)/OBJ/loadlibimg.obj
+####################################
+
+KOLIBRILIB_INCLUDE_PATH = ../include
+
+KOLIBRILIB_INCLUDE = -I $(KOLIBRILIB_INCLUDE_PATH) -I $(C_LAYER_DIR)/INCLUDE
+
+INCLUDES += $(KOLIBRILIB_INCLUDE)
+
+################################################
+
+default: Kalc
+
+
+Kalc: $(OBJECTS) Makefile
 
 	@echo "linking:" $(OBJECTS)
-	$(LD) $(LDFLAGS) $(LIBPATH) --subsystem console -o $(EXECUTABLE) $(OBJECTS) -lstdc++ -lsupc++ -lgcc -lc.dll
+	$(LD) $(LDFLAGS) $(LIBPATH) --subsystem console -o $(EXECUTABLE) $(OBJECTS) $(C_LAYER_OBJ) -lstdc++ -lsupc++  -lgcc -lc.dll 
 	kos32-strip -s $(EXECUTABLE) -o $(EXECUTABLE)
 	kos32-objcopy $(EXECUTABLE) -O binary
+	@rm $(EXECUTABLE).o
 
 %.o : %.cpp Makefile $(SOURCES)
+	
 	@echo "compile:" $@
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $< 
-
 
 
 	

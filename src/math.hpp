@@ -17,22 +17,44 @@ unsigned factorial(unsigned number)
     return result;
 }
 
-fraction factorial(fraction number)
-{
 
-}
+struct Number
+{
+    enum Type
+    {
+        Int = 0,
+        Unsigned,
+        Float,
+        Double
+    };
+    union
+    {
+        int i;
+        unsigned u;
+        float f;
+        double d;
+    };
+    unsigned _type;
+};
+
+
 
 template<class T>
 T MathThis(std::string input)
 {
-    for(unsigned i = 0; i < input.length(); i++)
+    std::vector<Number> Number;
+
+    std::string buff;
+
+    for(unsigned i = 0; i <= input.length(); i++)
     {
-        if (input[i] == "1" || input[i] == "2")
+        if(input[i] > 47 && input[i] < 58) //Если символ - число
         {
-            
+            buff.push_back(input[i]);
         }
     }
 }
+
 
 
 #endif
