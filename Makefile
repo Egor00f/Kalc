@@ -22,7 +22,7 @@ LDFLAGS = -static -S -nostdlib -Tapp-dynamic.lds --image-base 0 -O2 -T $(SDK_DIR
 
 
 
-SOURCES = $(EXECUTABLE).cpp 
+SOURCES = src/$(EXECUTABLE).cpp 
 OBJECTS =  $(patsubst %.cpp, %.o, $(SOURCES))
 
 
@@ -52,6 +52,7 @@ Kalc: $(OBJECTS) Makefile
 	kos32-strip -s $(EXECUTABLE) -o $(EXECUTABLE)
 	kos32-objcopy $(EXECUTABLE) -O binary
 	@rm $(EXECUTABLE).o
+	@echo "\ndone!\n"
 
 %.o : %.cpp Makefile $(SOURCES)
 	

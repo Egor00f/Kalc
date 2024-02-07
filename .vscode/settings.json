@@ -38,7 +38,8 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "utility": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "cstring": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

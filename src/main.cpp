@@ -1,10 +1,7 @@
-/*
-	Калькулятор
-*/
-#include <KolibriLib.hpp>
 
-#include <sstream>
-#include <string>
+#include <KolibriLib.hpp>
+#include <tinyexpr.h>
+
 
 #include "globals.hpp"
 #include "UI.hpp"
@@ -24,7 +21,9 @@ int main() {
 		)
 	);
 
-	
+	std::vector<unsigned> a = CalcButtons::DefineButtons();
+
+	globals::window.Render();
 
 	while(true)
 	{
@@ -35,7 +34,17 @@ int main() {
 		case KolibriLib::OS::Events::Exit:
 			
 			break;
-		
+		case KolibriLib::OS::Events::Button:
+
+			for(int i = 0; i < a.size(); i++)
+			{
+				if(a[i] == globals::window.GetPressedButton())
+				{
+					
+				}
+			}
+
+			break;
 		}
 	}
 
