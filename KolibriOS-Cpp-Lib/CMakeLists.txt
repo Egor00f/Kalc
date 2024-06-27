@@ -40,10 +40,10 @@ enable_language("ASM_FASM")
 
 
 #include toochain
-#include(CMakeLoadToolchainPath)
-#if(CUSTOM_TOOCLAIN_PATH)
-#	SET(TOOLCHAIN_DIR CUSTOM_TOOCLAIN_PATH)
-#endif()
+include(CMakeLoadToolchainPath)
+if(CUSTOM_TOOCLAIN_PATH)
+	SET(TOOLCHAIN_DIR CUSTOM_TOOCLAIN_PATH)
+endif()
 
 include(CMakeKOS32gcc)
 

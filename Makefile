@@ -1,5 +1,5 @@
 #NAME
-EXECUTABLE = kalc
+EXECUTABLE = Kalc
 
 AR	= kos32-ar
 AS	= kos32-as
@@ -8,61 +8,39 @@ CXX	= kos32-g++
 LD	= kos32-ld 
 
 #DIRs
-CONTRIB_DIR = ../kolibrios/contrib
+KolibriOS_repo_dir = ../kolibrios
+CONTRIB_DIR = $(KolibriOS_repo_dir)/contrib
 SDK_DIR = $(CONTRIB_DIR)/sdk
+TOOLCHAIN_DIR = C:/MinGW/msys/1.0/home/autobuild/tools/win32
+C_LAYER_OBJ_DIR = $(CONTRIB_DIR)/C_Layer/OBJ
 
-
-
-INCLUDES = -I $(SDK_DIR)/sources/newlib/libc/include -I $(SDK_DIR)/sources/libstdc++-v3/include 
-LIBPATH = -L $(SDK_DIR)/lib -L C:/MinGW/msys/1.0/home/autobuild/tools/win32/mingw32/lib
+INCLUDES = -I $(SDK_DIR)/sources/newlib/libc/include -I$(SDK_DIR)/sources/libstdc++-v3/include -IKolibriOS-Cpp-Lib/include -Itinyexpr
+LIBPATH = -L $(SDK_DIR)/lib -L $(TOOLCHAIN_DIR)/lib -L $(TOOLCHAIN_DIR)/mingw32/lib
 
 #Flags
-CFLAGS = -c -fno-ident -fomit-frame-pointer -fno-ident -U__WIN32__ -U_Win32 -U_WIN32 -U__MINGW32__ -UWIN32 -std=c++14
-LDFLAGS = -static -S -nostdlib -Tapp-dynamic.lds --image-base 0 -O2 -T $(SDK_DIR)/sources/newlib/app.lds
+CFLAGS = -c -fno-ident -fomit-frame-pointer -fno-ident -O2 -g -U__WIN32__ -U_Win32 -U_WIN32 -U__MINGW32__ -UWIN32 -std=c++11 -Wpointer-arith -fpermissive
+LDFLAGS = -static -S -nostdlib --image-base 0 -T $(SDK_DIR)/sources/newlib/app.lds --start-group -lgcc -lc.dll -lstdc++ -lsupc++ KolibriOS-Cpp-Lib/build/libKolibriLib.a --end-group
 
-
-
-SOURCES = src/$(EXECUTABLE).cpp 
+C_SOURCES = tinyexpr/tinyexpr.c
+CXX_SOURCES = src/main.cpp 
 OBJECTS =  $(patsubst %.cpp, %.o, $(SOURCES))
 
+default: Exapmle
 
-
-################# KolibriLib ####################
-
-############### C Layer ############
-C_LAYER_DIR = ../../C_Layer
-C_LAYER_OBJ = $(C_LAYER_DIR)/OBJ/loadlibimg.obj
-####################################
-
-KOLIBRILIB_INCLUDE_PATH = ../include
-
-KOLIBRILIB_INCLUDE = -I $(KOLIBRILIB_INCLUDE_PATH) -I $(C_LAYER_DIR)/INCLUDE
-
-INCLUDES += $(KOLIBRILIB_INCLUDE)
-
-################################################
-
-default: Kalc
-
-
-Kalc: $(OBJECTS) Makefile
-
-	@echo "linking: $(OBJECTS)"
-	$(LD) $(LDFLAGS) $(LIBPATH) --subsystem console -o $(EXECUTABLE) $(OBJECTS) $(C_LAYER_OBJ) -lstdc++ -lsupc++  -lgcc -lc.dll 
-	kos32-strip -s $(EXECUTABLE) -o $(EXECUTABLE)
+Exapmle: $(OBJECTS) Makefile
+	@echo "| linking:" $(OBJECTS)
+	$(LD) -o $(EXECUTABLE) $(LIBPATH) --subsystem native $(OBJECTS) $(LDFLAGS)
+	kos32-strip -S $(EXECUTABLE)
 	kos32-objcopy $(EXECUTABLE) -O binary
-	@rm $(EXECUTABLE).o
-	@echo "\ndone!\n"
 
-%.o : %.cpp Makefile $(SOURCES) KolibriLib
-	
-	@echo "compile:" $@
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $< 
+%.o : %.cpp Makefile $(CXX_SOURCES)
+	@echo "| compile:" $@
+	$(CXX) $(CFLAGS) $(INCLUDES) -o $@ $< 
 
+%.o : %.c Makefile $(C_SOURCES)
+	@echo "| compile:" $@
+	$(C) $(CFLAGS) $(INCLUDES) -o $@ $< 
 
 KolibriLib:
-	@cd KolibriOS-Cpp-Lib
-	@mkdir build
-	@cd build
-	@cmake .. -G "MinGW Makefiles"
-	@make
+	@sh buildKolibriLib.sh
+	$(MAKE) -f KolibriOS-Cpp-Lib/build

@@ -94,10 +94,7 @@ namespace KolibriLib
 			OS::Event Handler();
 
 			/// @brief Проверить какая нажата
-			UI::buttons::ButtonID GetPressedButtonID() const;
-
-			/// @brief Проверить какая нажата
-			ElementNumber GetPressedButton() const;
+			UI::buttons::ButtonID GetPressedButton();
 
 			/// @brief Получить текст введённый в форму
 			/// @param form номер формы в списке
@@ -416,7 +413,7 @@ namespace KolibriLib
 			return event;
 		}
 
-		UI::buttons::ButtonID Window::GetPressedButtonID() const
+		UI::buttons::ButtonID Window::GetPressedButton()
 		{
 			for (const auto &n : _Elements)
 			{
@@ -429,21 +426,6 @@ namespace KolibriLib
 				}
 			}
 		}
-
-		Window::ElementNumber Window::GetPressedButton() const
-		{
-			for (const auto &n : _Elements)
-			{
-				if (n.second->ClassName == "Button")
-				{
-					if (((UI::buttons::Button *)n.second)->GetStatus())
-					{
-						return n.first;
-					}
-				}
-			}
-		}
-
 		std::string Window::GetInputFromFrom(int form) const
 		{
 			auto it = _Elements.find(form);

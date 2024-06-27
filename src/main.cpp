@@ -1,8 +1,8 @@
 #include <vector>
-#include <sstream>
+//#include <sstream>
 
 #include <KolibriLib.hpp>
-#include <tinyexpr.h>
+//#include <tinyexpr.h>
 
 #include "configuration.hpp"
 
@@ -21,10 +21,10 @@ void Update(KolibriLib::Window *wnd, std::string *Input, const char &newchar)
 	{
 		
 		int error;
-		double output = te_interp(Input->c_str(), &error);
+		/*double output = te_interp(Input->c_str(), &error);
 		std::ostringstream strs;
 		strs << output;
-		*Input = strs.str();
+		*Input = strs.str();*/
 	}
 	else
 	{
@@ -91,6 +91,7 @@ int main()
 				}
 
 				break;
+				
 			case KolibriLib::Event::Key:
 
 				char pressed = KolibriLib::keyboard::CheckKeyboard();
@@ -101,7 +102,10 @@ int main()
 						Update(&wnd, &Input, pressed);
 					}
 				}
-
+				break;
+				
+			case KolibriLib::Event::Exit:
+				Exit = true;
 				break;
 		};
 
