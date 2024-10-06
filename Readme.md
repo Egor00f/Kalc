@@ -7,12 +7,27 @@ Kalc - это калькулятор для KolibriOS
 + Обычный калькулятор
 + Построение графиков
 
+Просто калькулятор ничего необычного
+
 Сборка
 ---
-Ну тут всё просто:
+
+Зависимости что нужно установить для сборки:
++ cmake
++ kolibrios c++ toolchain
+
+
+Склонируйте репозиторий:
 ```
-cd ~
 git clone https://github.com/Egor00f/Kalc.git
 cd Kalc
+git submodule update --init
+```
+
+Ну тут всё просто:
+```
+mkdir build
+cd build
+cmake .. -DCMAKE_TOOLCHAIN_FILE=../KolibriOS-Cpp-Lib/cmake/toolchain.cmake
 make
 ```
