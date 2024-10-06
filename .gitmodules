@@ -1,3 +1,6 @@
 [submodule "KolibriOS-Cpp-Lib"]
 	path = KolibriOS-Cpp-Lib
 	url = https://github.com/Egor00f/KolibriOS-Cpp-Lib.git
+[submodule "tinyexpr"]
+	path = tinyexpr
+	url = https://github.com/Egor00f/tinyexpr.git
