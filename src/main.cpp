@@ -2,7 +2,7 @@
 
 #include <KolibriLib.hpp>
 
-#include <tinyexpr.h>
+#include <tinyexpr/tinyexpr.hpp>
 
 const std::string ProgrammName = "Kalc";
 
@@ -51,7 +51,7 @@ void onInput(const std::string &inputedChar)
 
 		char buff[32];
 
-		std::sprintf(buff, "%f", te_interp(Input.c_str(), &error));
+		std::sprintf(buff, "%f", tinyexpr::interp(Input.c_str(), &error));
 
 		if(error)
 		{
